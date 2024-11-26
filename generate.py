@@ -17,26 +17,26 @@ def create_robot():
                       size=[1, 1, 1])
 
     # Torso와 Leg을 연결하는 Joint 추가 - 절대 좌표
-    pyrosim.Send_Joint(name="Torso_R_Leg",
-                       parent="Torso", child="R_Leg",
+    pyrosim.Send_Joint(name="Torso_RLeg",
+                       parent="Torso", child="RLeg",
                        type="fixed",
-                       position=[0.5, 0, 1.5]
+                       position=[0.5, 0, 1.0]
                        )
 
     # Leg 추가 - Joint 기준 상대 좌표
-    pyrosim.Send_Cube(name="R_Leg",
+    pyrosim.Send_Cube(name="RLeg",
                       pos=[0.5, 0, 0],
                       size=[1, 1, 1])
 
     # Torso와 Leg을 연결하는 Joint 추가 - 절대 좌표
-    pyrosim.Send_Joint(name="Torso_L_Leg",
+    pyrosim.Send_Joint(name="Torso_LLeg",
                        parent="Torso",
-                       child="L_Leg",
+                       child="LLeg",
                        type="fixed",
-                       position=[-0.5, 0, 1.5])
+                       position=[-0.5, 0, 1.0])
 
     # Leg 추가 - Joint 기준 상대 좌표
-    pyrosim.Send_Cube(name="L_Leg",
+    pyrosim.Send_Cube(name="LLeg",
                       pos=[-0.5, 0, 0],
                       size=[1, 1, 1])
 
