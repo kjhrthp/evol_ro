@@ -4,8 +4,8 @@ physicsClient = p.connect(p.GUI)
 p.setRealTimeSimulation(1)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0,0,-9.8)
-planeId = p.loadURDF("plane.urdf")
-p.loadSDF("boxes.sdf")
+p.loadURDF("plane.urdf")
+planeId = p.loadURDF("body.urdf")
 import time
 for i in range(1000):
     p.stepSimulation()
