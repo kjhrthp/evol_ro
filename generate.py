@@ -7,7 +7,7 @@ def create_world():
 
 
 
-def create_robot():
+def Generate_Body():
     # URDF 파일 생성 시작
     pyrosim.Start_URDF("body.urdf")
 
@@ -43,7 +43,17 @@ def create_robot():
     # URDF 파일 저장 종료
     pyrosim.End()
 
+def Generate_Brain():
+    pyrosim.Start_NeuralNetwork("brain.nndf")
 
+    pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
+    pyrosim.Send_Sensor_Neuron(name=1, linkName="RLeg")
+    pyrosim.Send_Sensor_Neuron(name=2, linkName="LLeg")
+
+    pyrosim.Send_Motor_Neuron(name=3, jointName="Torso_RLeg")
+    pyrosim.Send_Motor_Neuron(name=4, jointName="Torso_LLeg")
+    pyrosim.End()
 
 create_world()
-create_robot()
+Generate_Body()
+Generate_Brain()
