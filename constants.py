@@ -8,3 +8,5 @@ back_leg_phase_offset = 0
 front_leg_phase_offset = np.pi / 34
 max_F = 100
 numberOfGenerations = 100
+populationSize = 10
+numberOfGenerations = 10

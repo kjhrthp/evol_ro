@@ -5,16 +5,26 @@ import pybullet as p  # pybullet 모듈 임포트
 import numpy as np
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import constants as c
+import os
+import platform
 
 class ROBOT:
-    def __init__(self):
+    def __init__(self, myID):
+        self.myID = myID  # ID 저장
         self.robotId = p.loadURDF("body.urdf")  # 로봇 로드
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.sensors = {}
         self.motors = {}
-        self.nn = NEURAL_NETWORK("brain.nndf")  # Initialize the neural network
+        self.nn = NEURAL_NETWORK(f"brain{myID}.nndf")  # 고유 브레인 파일 로드
         self.prepare_to_sense()
         self.prepare_to_act()
+
+        # brain 파일 삭제
+        brainFileName = f"brain{self.myID}.nndf"
+        if platform.system() == "Windows":
+            os.system(f"del {brainFileName}")  # Windows 사용
+        else:
+            os.system(f"rm {brainFileName}")  # Linux/Mac 사용
 
     def prepare_to_sense(self):
         for linkName in pyrosim.linkNamesToIndices:
@@ -45,18 +55,20 @@ class ROBOT:
                     targetPosition=desiredAngle,
                     maxForce=c.max_F
                 )
-                #print(f"Neuron: {neuronName}, Joint: {jointName}, Desired Angle: {desiredAngle}")
 
     def Think(self):
-        #self.nn.Print() # 이걸 주석처리 해제해야만 값이 프린트됨
         self.nn.Update()
- # Print neural network details for now
 
     def Get_Fitness(self):
         stateOfLinkZero = p.getLinkState(self.robotId, 0)
         positionOfLinkZero = stateOfLinkZero[0]
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        # fitness.txt에 저장
-        with open("fitness.txt", "w") as f:
+        # 절대 경로로 fitness 파일 생성
+        fitnessFileName = os.path.join(os.getcwd(), f"fitness{self.myID}.txt")
+        with open(fitnessFileName, "w") as f:
             f.write(str(xCoordinateOfLinkZero))
+        print(f"[DEBUG] Fitness saved to {fitnessFileName}")
+
+
+

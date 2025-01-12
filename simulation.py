@@ -56,29 +56,34 @@ import constants as c
 import time
 
 class SIMULATION:
-    def __init__(self, directOrGUI):
-        if directOrGUI == "DIRECT":
+    def __init__(self, directOrGUI, solutionID):  # solutionID 추가
+        self.directOrGUI = directOrGUI  # 모드 저장
+        self.solutionID = solutionID  # 고유 ID 저장
+
+        if self.directOrGUI == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)  # 시뮬레이션 창 없이 실행
         else:
             self.physicsClient = p.connect(p.GUI)  # GUI 모드로 실행
+
         p.setRealTimeSimulation(1)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -9.81)
 
         self.world = World()
-        self.robot = ROBOT()
+        self.robot = ROBOT(solutionID)  # solutionID 전달
 
     def run(self):
         for t in range(c.steps):
             p.stepSimulation()
             self.robot.sense(t)
-            self.robot.Think()  # Added Think() method
+            self.robot.Think()
             self.robot.act(t)
-            time.sleep(c.time_step)
+            if self.directOrGUI == "GUI":
+                time.sleep(c.time_step)
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()
 
-
     def __del__(self):
         p.disconnect()
+

@@ -46,6 +46,16 @@ class HILL_CLIMBER:
         print(f"Parent: {self.parent.fitness}, Child: {self.child.fitness}")
 
     def Show_Best(self):
-        self.parent.Evaluate("GUI")  # GUI 모드로 최종 솔루션 평가
+        # 최적의 부모 솔루션 찾기
+        bestParent = None
+        bestFitness = float('inf')  # 초기값을 무한대로 설정
 
+        for parent in self.parents.values():
+            if parent.fitness < bestFitness:
+                bestFitness = parent.fitness
+                bestParent = parent
 
+        # GUI 모드로 최적의 부모 솔루션 재시뮬레이션
+        if bestParent:
+            print(f"Re-simulating the best solution with fitness: {bestFitness}")
+            bestParent.Start_Simulation("GUI")
